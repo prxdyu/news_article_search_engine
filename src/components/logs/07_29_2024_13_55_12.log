@@ -1,0 +1,3 @@
+[2024-07-29 13:55:12,863] - 34  root - INFO- Indexing has started
+[2024-07-29 13:55:12,863] - 45  root - INFO- Created an empty index
+[2024-07-29 13:55:12,863] - 51  root - INFO- Succesfully inserted embeddings into the index

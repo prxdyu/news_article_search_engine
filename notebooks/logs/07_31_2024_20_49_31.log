@@ -1,0 +1,9 @@
+[2024-07-31 20:49:31,444] - 129  root - INFO- Index loaded from ../artifacts/annoy_index.ann
+[2024-07-31 20:52:27,747] - 129  root - INFO- Index loaded from ../artifacts/annoy_index.ann
+[2024-07-31 20:52:34,476] - 129  root - INFO- Index loaded from ../artifacts/annoy_index.ann
+[2024-07-31 20:52:40,803] - 129  root - INFO- Index loaded from ../artifacts/annoy_index.ann
+[2024-07-31 20:52:40,905] - 32  root - INFO- Searching for 1 queries
+[2024-07-31 20:52:40,920] - 66  sentence_transformers.SentenceTransformer - INFO- Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+[2024-07-31 20:52:41,494] - 105  sentence_transformers.SentenceTransformer - INFO- Use pytorch device: cpu
+[2024-07-31 20:52:41,520] - 59  root - INFO- Processing query: women entrepreneuship in india
+[2024-07-31 20:52:41,583] - 101  root - INFO- Search complete
