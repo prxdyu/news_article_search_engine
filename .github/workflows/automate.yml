@@ -7,9 +7,15 @@ on:
     branches:
        - main
 
+# adding environment variables
+env:
+  ECR_REPOSITORY: news_article_search_engine
+  CONTAINER_NAME: news_article_search_engine
+
 
 # defining the jobs
 jobs:
+
   # defining Continous integration which tested our application when any push happens
   Continous-Integration:
     runs-on: ubuntu-latest
@@ -34,7 +40,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ secrets.REGION_NAME }}
       
       # Set environment variable for bucket name
       - name: Set BUCKET_NAME
@@ -42,3 +48,71 @@ jobs:
 
       - name: Run tests with pytest
         run: pytest test.py
+
+
+    # defining Continous delivery which builds and pushes docker image to AWS ECR
+    Continous-Delivery:
+      needs: Continous-Integration
+      runs-on: ubuntu-latest
+      environment: production
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        
+        - name: Login to Amazon ECR
+          id: login-ecr
+          uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
+          with:
+            registry: ${{ steps.login-ecr.outputs.registry }}
+            region:  ${{ secrets.REGION_NAME}}
+            aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+            aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          
+        - name: Build, tag and push image to Amazon ECR
+          id: build-image
+          env:
+            ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+            IMAGE_TAG: ${{ github.sha }}
+          run: |
+            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+            echo "image = $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
+
+    # defining Continous deployment which pulls docker image from AWS ECR and pushed it to the EC2 instance
+    Continous-Deployment:
+      needs: Continous-Delivery
+      runs-on: self-hosted
+      environment: production
+      steps:
+
+        - name: Stop containers running on port 5000
+          run: |
+            #!/bin/bash
+            
+            # List running containers and filter those listening on port 5000
+            containers=$(docker ps --format '{{.ID}} {{.Ports}}' | grep ':5000->5000')
+
+            # Stop each container
+            while IFS= read -r container; do
+                container_id=$(echo "$container" | awk '{print $1}')
+                echo "Stopping container $container_id"
+                docker stop "$container_id"
+            done <<< "$containers"
+
+        - name: Deploy docker image from ECR to EC2 instance
+          id: deploy-image
+          env:
+            ECR_REGISTRY: 851725554615.dkr.ecr.us-east-1.amazonaws.com
+            ECR_REPOSITORY: news_article_search_engine
+            IMAGE_TAG: ${{ github.sha }}    
+          run: |
+              whoami
+              echo "ECR_REGISTRY: $ECR_REGISTRY"
+              echo "ECR_REPOSITORY: $ECR_REPOSITORY"
+              echo "IMAGE_TAG: $IMAGE_TAG"
+              aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 851725554615.dkr.ecr.us-east-1.amazonaws.com
+              docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG;
+              docker stop $CONTAINER_NAME || true
+              docker rm $CONTAINER_NAME || true
+              docker run -d -p 5000:5000 $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG;
+              docker system prune -f 
