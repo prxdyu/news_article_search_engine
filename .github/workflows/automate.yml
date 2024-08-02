@@ -20,12 +20,19 @@ jobs:
         with:
           python-version: 3.8
 
+      # Debugging step to check the secrets
+      - name: Print secrets for debugging
+        run: |
+          echo "AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}"
+          echo "AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          echo "REGION_NAME: ${{ secrets.REGION_NAME }}"
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1 # Hard-coding the region for debugging
+          aws-region: ${{ env.REGION_NAME }}
 
       - name: Echo AWS Region
-        run: echo "AWS Region is us-east-1" # Hard-coding the region for debugging
+        run: echo "AWS Region is ${{ secrets.REGION_NAME }}"
