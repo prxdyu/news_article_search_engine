@@ -153,7 +153,7 @@ def preprocess_text(text:str)->str:
     # lowercasing all letters in the text
     text = text.lower()
     # removing non_alphanumeric elements
-    pattern = '[^a-zA-Z0-9%\ \n]+'
+    pattern = '[^a-zA-Z0-9% \n]+'
     text = re.sub(pattern, '', text)
     # removing digits 
     text = re.sub(r'\d+', '', text)
