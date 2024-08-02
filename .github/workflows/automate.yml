@@ -68,8 +68,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          registry-type: private
-          registries: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.REGION_NAME }}.amazonaws.com
+          registry-ids: ${{ secrets.AWS_ACCOUNT_ID }}
           
       - name: Build, tag and push image to Amazon ECR
         id: build-image
