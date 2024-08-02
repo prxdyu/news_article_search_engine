@@ -12,8 +12,6 @@ import pickle
 
 import os
 
-bucket_name = os.getenv('BUCKET_NAME')
-print(f'BUCKET_NAME: {bucket_name} (type: {type(bucket_name)})')
 
 
 # downloading the index if it does'nt present in the local
