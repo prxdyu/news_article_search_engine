@@ -1,20 +1,17 @@
-# defining the name of the workflow
+# defining the name of the workflow (Containerizing the Image and deploying it to ECS) ==> Continuous Delivery
 name: CI/CD Pipeline
 
-# specifying this workflow will get triggered if we push anything to the main branch
+# specifying this workflow will get triggered if we push anything to the main branch.
 on:
   push:
     branches:
-      - main
+       - main
 
-# adding environment variables
-env:
-  AWS_REGION: us-east-1
-  
 
 # defining the jobs
 jobs:
-  Continuous-Integration:
+  # defining Continous integration which tested our application when any push happens
+  Continous-Integration:
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -25,19 +22,23 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-
-      # Debugging step to check the secrets
-      - name: Print secrets for debugging
+      
+      - name: Install Dependencies
         run: |
-          echo "AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}"
-          echo "AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-
-      - name: Configure AWS credentials
+          python -m pip install --upgrade pip 
+          pip install -r requirements.txt
+      
+      # Configuring AWS creds
+      - name: Configure AWS 
         uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      
+      # Set environment variable for bucket name
+      - name: Set BUCKET_NAME
+        run: echo "BUCKET_NAME=${{ secrets.BUCKET_NAME }}" >> $GITHUB_ENV
 
-      - name: Echo AWS Region
-        run: echo "AWS Region is ${{ secrets.REGION_NAME }}"
+      - name: Run tests with pytest
+        run: pytest test.py
