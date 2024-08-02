@@ -61,12 +61,10 @@ jobs:
         
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
+        uses: aws-actions/amazon-ecr-login@v1
         with:
-          registry: ${{ steps.login-ecr.outputs.registry }}
-          region:  ${{ secrets.REGION_NAME}}
-          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          registries: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.REGION_NAME }}.amazonaws.com
+          
           
       - name: Build, tag and push image to Amazon ECR
         id: build-image
