@@ -7,6 +7,11 @@ on:
     branches:
       - main
 
+# adding environment variables
+env:
+  AWS_REGION: us-east-1
+  
+
 # defining the jobs
 jobs:
   Continuous-Integration:
@@ -32,7 +37,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.REGION_NAME }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Echo AWS Region
         run: echo "AWS Region is ${{ secrets.REGION_NAME }}"
