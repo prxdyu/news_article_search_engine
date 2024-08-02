@@ -13,7 +13,6 @@ env:
   ECR_REPOSITORY: news_article_search_engine
   CONTAINER_NAME: news_article_search_engine
 
-
 # defining the jobs
 jobs:
   # defining Continous integration which tested our application when any push happens
@@ -33,5 +32,17 @@ jobs:
           python -m pip install --upgrade pip 
           pip install -r requirements.txt
       
+      # Configuring AWS creds
+      - name: Configure AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.REGION_NAME }}
+      
+      # Set environment variable for bucket name
+      - name: Set BUCKET_NAME
+        run: echo "BUCKET_NAME=${{ secrets.BUCKET_NAME }}" >> $GITHUB_ENV
+
       - name: Run tests with pytest
         run: pytest test.py
