@@ -86,18 +86,7 @@ jobs:
     runs-on: self-hosted
     environment: production
     steps:
-      - name: Stop containers running on port 5000
-        run: |
-          #!/bin/bash
-          # List running containers and filter those listening on port 5000
-          containers=$(docker ps --format '{{.ID}} {{.Ports}}' | grep ':5000->5000')
-          # Stop each container
-          while IFS= read -r container; do
-              container_id=$(echo "$container" | awk '{print $1}')
-              echo "Stopping container $container_id"
-              docker stop "$container_id"
-          done <<< "$containers"
-
+    
       - name: Deploy docker image from ECR to EC2 instance
         id: deploy-image
         env:
