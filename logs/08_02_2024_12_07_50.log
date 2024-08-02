@@ -1,0 +1,17 @@
+[2024-08-02 12:07:51,059] - 128  root - INFO- Index loaded from artifacts/annoy_index.ann
+[2024-08-02 12:07:51,152] - 224  werkzeug - INFO- [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[2024-08-02 12:07:51,152] - 224  werkzeug - INFO- [33mPress CTRL+C to quit[0m
+[2024-08-02 12:07:52,741] - 224  werkzeug - INFO- 127.0.0.1 - - [02/Aug/2024 12:07:52] "GET /search HTTP/1.1" 200 -
+[2024-08-02 12:08:07,924] - 32  root - INFO- Searching for 1 queries
+[2024-08-02 12:08:07,941] - 66  sentence_transformers.SentenceTransformer - INFO- Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+[2024-08-02 12:08:08,682] - 105  sentence_transformers.SentenceTransformer - INFO- Use pytorch device: cpu
+[2024-08-02 12:08:08,712] - 59  root - INFO- Processing query: Mobiles
+[2024-08-02 12:08:08,715] - 101  root - INFO- Search complete
+[2024-08-02 12:08:08,732] - 224  werkzeug - INFO- 127.0.0.1 - - [02/Aug/2024 12:08:08] "POST /search HTTP/1.1" 200 -
+[2024-08-02 12:09:22,830] - 32  root - INFO- Searching for 1 queries
+[2024-08-02 12:09:22,847] - 66  sentence_transformers.SentenceTransformer - INFO- Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+[2024-08-02 12:09:23,192] - 105  sentence_transformers.SentenceTransformer - INFO- Use pytorch device: cpu
+[2024-08-02 12:09:23,209] - 59  root - INFO- Processing query: Mobiles
+[2024-08-02 12:09:23,209] - 101  root - INFO- Search complete
+[2024-08-02 12:09:23,228] - 224  werkzeug - INFO- 127.0.0.1 - - [02/Aug/2024 12:09:23] "POST /search HTTP/1.1" 200 -

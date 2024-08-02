@@ -17,3 +17,5 @@ spacy-loggers==1.0.4
 
 boto3
 fsspec
+
+pytest

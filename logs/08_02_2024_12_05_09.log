@@ -1,0 +1,5 @@
+[2024-08-02 12:05:10,435] - 128  root - INFO- Index loaded from artifacts/annoy_index.ann
+[2024-08-02 12:05:10,524] - 224  werkzeug - INFO- [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[2024-08-02 12:05:10,524] - 224  werkzeug - INFO- [33mPress CTRL+C to quit[0m
+[2024-08-02 12:05:22,274] - 224  werkzeug - INFO- 127.0.0.1 - - [02/Aug/2024 12:05:22] "GET /search HTTP/1.1" 200 -

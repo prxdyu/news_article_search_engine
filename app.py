@@ -64,9 +64,9 @@ def ping():
 
 
 
-# defining the search route
-@app.route("/search",methods=['POST'])
-def search():
+# defining the route for getting results in json
+@app.route("/api/search",methods=['POST'])
+def search_api():
     """Searches for relevant articles from the index"""
     
     # accessing the request object
@@ -81,8 +81,34 @@ def search():
     results = searcher.search(index, query, k, mapping, metadata)
 
     return jsonify(results)
+    
 
 
+
+
+# defining the route for getting results in webpage
+@app.route("/search",methods=['GET','POST'])
+def search_web():
+    """
+    Searches for relevant articles from the index
+    returns the result in the form of webpage
+    """
+    if request.method == 'POST':
+        # accessing the request object
+        req = request.form
+
+        # getting the search query and k from the request object
+        query = [req["query"]]
+        k = int(req["k"])
+        #k = int(req.get("k", 3))  
+
+        # searching for the relevant articles
+        searcher = SearchPipeline()
+        results = searcher.search(index, query, k, mapping, metadata)
+        return render_template('index.html',query=query[0],k=k,results=results[0]['results'])
+    
+    else:
+        return render_template('index.html',data={})
 
 
 if __name__=="__main__":
