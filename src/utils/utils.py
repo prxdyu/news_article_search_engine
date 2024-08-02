@@ -12,6 +12,7 @@ import pickle
 import json
 
 import spacy
+import subprocess,sys
 from spacy.lang.en.stop_words import STOP_WORDS as spacy_stop_words
 import nltk
 nltk.download('stopwords')
@@ -19,7 +20,13 @@ from nltk.corpus import stopwords as nltk_stop_words
 
 # defining the lemmatizer and stopwords
 STOP_WORDS = set(spacy_stop_words).union(set(nltk_stop_words.words("english")))
-SPACY_TOKENIZER = spacy.load('en_core_web_sm')
+
+try:
+    SPACY_TOKENIZER = spacy.load('en_core_web_sm')
+except OSError:
+    # downlaoding the en_core_web_sm
+     subprocess.check_call([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
+     SPACY_TOKENIZER = spacy.load('en_core_web_sm')
 
 """ # Load the .env file to access the environment variables
 from dotenv import load_dotenv
