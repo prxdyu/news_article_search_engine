@@ -107,8 +107,6 @@ jobs:
           echo "IMAGE_TAG: $IMAGE_TAG"
           aws ecr get-login-password --region ${{ secrets.REGION_NAME }} | docker login --username AWS --password-stdin $ECR_REGISTRY
           docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker stop $CONTAINER_NAME || true
-          docker rm $CONTAINER_NAME || true
           docker run -d -p 5000:5000 \
           -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
           -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
